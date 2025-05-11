@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+  background-color: #f8f9fa;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+.home-container.light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* HEADER */
+.home-header {
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: linear-gradient(to right, #0b5291, #08fe00);
+  color: white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.hero-title {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin: 10px 0 20px;
+}
+
+.theme-toggle {
+  background-color: white;
+  color: #4facfe;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: #4facfe;
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: rgb(189, 12, 12);
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+/* FEATURES SECTION */
+.home-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px 20px;
+}
+
+.feature-card {
+  background-color: rgb(26, 18, 18);
+  color: #fdfafa;
+  border-radius: 16px;
+  padding: 25px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+/* FOOTER */
+.home-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  background-color: transparent;
+}
