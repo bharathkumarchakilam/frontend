@@ -5,33 +5,41 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: 'parallel_connection'  # Your Azure DevOps service connection name
-  webAppName: 'frontendapp'                 # Your Azure Web App name
-  packagePath: '$(Build.ArtifactStagingDirectory)/frontend.zip'
+  azureSubscription: 'parallel_connection'
+  webAppName: 'frontendapp'
+  buildDir: 'build'
 
 steps:
-# Zip the frontend static files (already present in the repo)
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Build Frontend'
+
+# Zip the contents of the build folder (not the folder itself)
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)'   # Adjust if files are in a subfolder
+    rootFolderOrFile: '$(buildDir)'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(packagePath)'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/frontend.zip'
     replaceExistingArchive: true
-  displayName: 'Zip Static Files'
+  displayName: 'Archive build output'
 
-# Publish the zip as an artifact
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(packagePath)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/frontend.zip'
     ArtifactName: 'frontend'
   displayName: 'Publish Artifact'
 
-# Deploy the zip package to Azure App Service
 - task: AzureWebApp@1
   inputs:
     azureSubscription: '$(azureSubscription)'
     appType: 'webApp'
     appName: '$(webAppName)'
-    package: '$(packagePath)'
+    package: '$(Build.ArtifactStagingDirectory)/frontend.zip'
   displayName: 'Deploy to Azure Web App'
