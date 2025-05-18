@@ -5,34 +5,26 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: 'parallel_connection'  # ← use the name from step 2
-  webAppName: 'frontendapp'    # Replace this with your Azure Web App name
+  azureSubscription: 'parallel_connection'  # Your Azure DevOps service connection name
+  webAppName: 'frontendapp'                 # Your Azure Web App name
   packagePath: '$(Build.ArtifactStagingDirectory)/frontend'
 
-
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install Node.js'
-
-- script: |
-    npm install
-    npm run build
-  displayName: 'Build Frontend'
-
+# Copy static build files (already in repo) to artifact staging
 - task: CopyFiles@2
   inputs:
-    contents: 'build/**'
+    contents: '**/*'
     targetFolder: '$(packagePath)'
-  displayName: 'Copy Build Output'
+  displayName: 'Copy Static Files from Repo'
 
+# Publish the copied files as a pipeline artifact
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(packagePath)'
     ArtifactName: 'frontend'
   displayName: 'Publish Build Artifacts'
 
+# Deploy to Azure Web App
 - task: AzureWebApp@1
   inputs:
     azureSubscription: '$(azureSubscription)'
