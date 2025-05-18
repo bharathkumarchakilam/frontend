@@ -1,0 +1,37 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureSubscription: 'parallel_connection'  # Your Azure DevOps service connection name
+  webAppName: 'frontendapp'                 # Your Azure Web App name
+  packagePath: '$(Build.ArtifactStagingDirectory)/frontend.zip'
+
+steps:
+# Zip the frontend static files (already present in the repo)
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'   # Adjust if files are in a subfolder
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(packagePath)'
+    replaceExistingArchive: true
+  displayName: 'Zip Static Files'
+
+# Publish the zip as an artifact
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(packagePath)'
+    ArtifactName: 'frontend'
+  displayName: 'Publish Artifact'
+
+# Deploy the zip package to Azure App Service
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
+    appName: '$(webAppName)'
+    package: '$(packagePath)'
+  displayName: 'Deploy to Azure Web App'
