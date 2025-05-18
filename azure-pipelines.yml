@@ -6,6 +6,8 @@ pool:
 
 variables:
   azureSubscription: 'parallel_connection'  # ← use the name from step 2
+  webAppName: 'frontendapp'    # Replace this with your Azure Web App name
+  packagePath: '$(Build.ArtifactStagingDirectory)/frontend'
 
 
 steps:
