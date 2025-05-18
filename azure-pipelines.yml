@@ -4,6 +4,11 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  azureSubscription: 'bc1b9738-d3b8-403b-9aea-f953c37efafb' # Replace with your Azure DevOps service connection name
+  webAppName: 'frontendapp'              # Replace with your Azure Web App name
+  packagePath: '$(Build.ArtifactStagingDirectory)/frontend'
+
 steps:
 - task: NodeTool@0
   inputs:
@@ -18,9 +23,19 @@ steps:
 - task: CopyFiles@2
   inputs:
     contents: 'build/**'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    targetFolder: '$(packagePath)'
+  displayName: 'Copy Build Output'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(packagePath)'
     ArtifactName: 'frontend'
+  displayName: 'Publish Build Artifacts'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
+    appName: '$(webAppName)'
+    package: '$(packagePath)'
+  displayName: 'Deploy to Azure Web App'
