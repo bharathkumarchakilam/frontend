@@ -5,9 +5,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: 'bc1b9738-d3b8-403b-9aea-f953c37efafb' # Replace with your Azure DevOps service connection name
-  webAppName: 'frontendapp'              # Replace with your Azure Web App name
-  packagePath: '$(Build.ArtifactStagingDirectory)/frontend'
+  azureSubscription: 'parallel_connection'  # ← use the name from step 2
+
 
 steps:
 - task: NodeTool@0
